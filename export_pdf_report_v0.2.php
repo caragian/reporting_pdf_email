@@ -2,15 +2,13 @@
 
 namespace Icinga\Module\Slm\scripts;
 
-class ExportCsvReport
+class ExportPdfReport
 {
     private $username;
 
     private $password;
 
     private $domain = 'localhost';
-
-    // private $reportId = 0;
 
     private $message;
 
@@ -20,25 +18,19 @@ class ExportCsvReport
 
     private $protocol = 'https';
 
-    private $filePath = '';
-
     private $status = true;
 
     private $helpOption = false;
-
-    private $forceOverwrite = false;
 
     public function __construct()
     {
         if (isset($_SERVER['argv'])) {
             if (in_array('-h', $_SERVER['argv']) || in_array('--help', $_SERVER['argv'])) {
                 $this->setHelpOption(true);
-            } elseif (in_array('-F', $_SERVER['argv'])) {
-                $this->setForceOverwrite(true);
             }
         }
 
-        $cliParams = getopt('u:p:d:i:f:P:H:');
+        $cliParams = getopt('u:p:');
 
         if (isset($cliParams['u'])) {
             $this->setUsername($cliParams['u']);
@@ -111,7 +103,6 @@ class ExportCsvReport
         $this->message .= 'Usage: php /path-of-the-script/export_pdf_report.php [options] [-u] [-p]
         -u                  Admin username of the Neteye application.=
         -p                  Admin password of the Neteye application.
-        >  <path>                 Destination File Path
         -h, --help          To display the help section.' . chr(10);
     }
 
@@ -130,37 +121,53 @@ class ExportCsvReport
                     CURLOPT_SSL_VERIFYHOST => false,
                     CURLOPT_SSL_VERIFYPEER => false,
                     CURLOPT_HTTPHEADER => [
+
                         // 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0',
                         // 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
                         // 'Accept-Language: en-US,en;q=0.5',
                         // 'Accept-Encoding: gzip, deflate, br',
-                        // 'Referer: https://localhost/neteye/monitoring/list/services?service_problem=1&sort=service_severity&dir=desc&format=pdf',
                         // 'Connection: keep-alive',
+                        // 'Cookie: icingaweb2-tzo=3600-0; icingaweb2-session=1584611259; Icingaweb2=3dg9ktg00f22fgjgkdkaqnak6f',
                         // 'Upgrade-Insecure-Requests: 1',
                         // 'Cache-Control: max-age=0'
-
 
                         'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0',
                         'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
                         'Accept-Language: en-US,en;q=0.5',
                         'Accept-Encoding: gzip, deflate, br',
                         'Connection: keep-alive',
-                        'Referer: https://localhost/neteye/monitoring/list/services?service_problem=1&sort=service_severity&dir=desc&format=pdf',
-                        'Cookie: Icingaweb2=mvhimo86mslpt5dd99044vsnna; icingaweb2-tzo=3600-0; icingaweb2-session=1584375558',
+                        // 'Cookie: icingaweb2-tzo=3600-0; icingaweb2-session=1584615767; Icingaweb2=3dg9ktg00f22fgjgkdkaqnak6f',
                         'Upgrade-Insecure-Requests: 1',
                         'Cache-Control: max-age=0'
-                        
                     ],
                     CURLOPT_HTTPAUTH => CURLAUTH_ANY,
-                    CURLOPT_USERPWD => $this->getUsername() . ':' . $this->getPassword()
+                    CURLOPT_USERPWD => $this->getUsername() . ':' . $this->getPassword(),
+                    CURLOPT_REFERER => 'https://localhost/neteye/monitoring/list/services?service_problem=1&sort=service_severity&dir=desc&format=pdf'
                 ]
             );
 
+            
             // obtain result
             $content = curl_exec($ch);
-            $info = curl_getinfo($ch);
-            $httpCode = $info['http_code'];
+            
+            // $httpCode = $info['http_code'];
             $error = curl_error($ch);
+
+            $curl_info = curl_getinfo($ch);
+            $curl_cookie = curl_getinfo($ch, CURLINFO_COOKIELIST);
+            print_r($curl_cookie);
+            // print_r($curl_info);
+
+            $user = $this->getUsername();
+            $password = $this->getPassword();
+            echo "$user\n";
+            echo "$password\n";
+
+            $info =  phpinfo();
+            // print_r($info);
+            // exit;
+
+
 
             // Close curl connection
             curl_close($ch);
@@ -179,7 +186,7 @@ class ExportCsvReport
     protected function sendMail(
         $mailTo,
         $file,
-        $fromName = "Nicolae",
+        $fromName = "Neteye4 - Service Problem",
         $from = "pbzneteye4@wuerth-phoenix.com",
         $message = "NetEye4 Monitoring Status Email",
         $subject    = "NetEye4 Monitoring Status Email"
@@ -197,8 +204,9 @@ class ExportCsvReport
         $semi_rand = md5(time()); 
         $mime_boundary = "==Multipart_Boundary_x{$semi_rand}x"; 
 
-        $htmlContent = '<h1>PHP Email with Attachment by CodexWorld</h1>
-            <p>This email has sent from PHP script with attachment.</p>';
+        $date = getdate();
+
+        $htmlContent = '<h1>NetEye Reporting Service Problem</h1>';
 
         //headers for attachment 
         $headers .= "\nMIME-Version: 1.0\n" . "Content-Type: multipart/mixed;\n" . " boundary=\"{$mime_boundary}\""; 
@@ -224,47 +232,33 @@ class ExportCsvReport
         }
         $message .= "--{$mime_boundary}--";
         $returnpath = "-f" . $from;
-
+        echo ("\nSending E-Mail to $mailTo\n");
         return mail($mailTo, $subject, $message, $headers, $returnpath); 
     }
     
     public function reportingApiCall()
     {
-                if (True){
+            if (!$this->isHelpOption()) {
                     $baseUrl = sprintf(
                         '%s://%s%s/neteye/monitoring/list/services?service_problem=1&sort=service_severity&dir=desc&format=pdf',
-                        'https',
-                        'localhost',
-                        ''
-                        // $this->getProtocol(),
-                        // $this->getDomain()
-                        // $this->getPort()
+                        $this->getProtocol(),
+                        $this->getDomain(),
+                        $this->getPort()
+                         
                     );
+                  
                     $response = $this->curlCall($baseUrl);
 
+                    echo("\nBaseURL: $baseUrl\n");
 
-
-                $cookie = session_get_cookie_params();
-
-                print_r($cookie);
-                exit();
-
-                    
-                    
+                    // print_r($response);
 
                     if (!strlen($response['content']) || $response['http_code'] == 0) {
                         $this->message = 'Got error response (Code: ' . $response['http_code'] . ')' . chr(10);
                         $this->status = false;
                     }
                     
-                    $date = getdate();
-                    $today = $date['year'].$date['mon'].$date['mday'];
-                    $fileName = "/tmp/exportPdf/service_problem_$today.pdf";
-                    $myFile = fopen($fileName, "w") or die("Unable to open file!");
-                    fwrite($myFile, $response['content']);
-                    fclose($myFile);
-
-                    $file = $fileName;
+                    
 
                     if (!isset($response['http_code']) ||
                         $response['http_code'] < 200 ||
@@ -283,37 +277,37 @@ class ExportCsvReport
                         );
                         $this->status = false;
                     }
-                    
 
+                    $date = getdate();
+                    $today = $date['year'].$date['mon'].$date['mday'];
+                    $fileName = "/tmp/exportPdf/service_problem_$today.pdf";
+
+                    
+                    if (file_exists($fileName)) {
+                        echo ("\nThe file $fileName exists.\nOnly Email will be sent.\n");
+                    } else {
+                        echo "\nThe file $fileName does not exist\nCreation in progress...\n";
+                        $myFile = fopen($fileName, "w") or die("Unable to open file!");
+                        fwrite($myFile, $response['content']);
+                        fclose($myFile);
+                        if (file_exists($fileName)) {
+                            echo ("$fileName creation is completed\n");
+                        }
+                        else{
+                            echo ("Something went wrong!!\n");
+                        }
+                    }
+
+                    $file = $fileName;
+                    
+                    
                     $email = $this->sendMail($this->mailTo, $file);
                     exit;
 
-                    if ($this->status) {
-                        $content =  json_decode(
-                            $response ['content'],
-                            true
-                        );
-                        $folder = dirname($this->getFilePath());
-                        if (!file_exists($folder)) {
-                            $this->message = 'Invalid file path' . chr(10);
-                        } else {
-                            $fileAlreadyExists = file_exists($this->getFilePath());
-                            if (!$fileAlreadyExists || $this->isForceOverwrite()) {
-                                //Give our CSV file a name.
-                                if ($this->isForceOverwrite() && $fileAlreadyExists) {
-                                    unlink($this->getFilePath());
-                                }
-                                if ($this->jsonToCSV($content, $this->getFilePath())) {
-                                    $this->message = 'Completed!!' . chr(10);
-                                }
-                            } else {
-                                // output an error
-                                $this->message = 'File is already existing' . chr(10);
-                            }
-                        }
-                    }
+                }else {
+                    $this->helpSection();
                 }
-            }
+        }
 
 
 
@@ -335,22 +329,6 @@ class ExportCsvReport
     }
 
     /**
-     * @return bool
-     */
-    public function isForceOverwrite()
-    {
-        return $this->forceOverwrite;
-    }
-
-    /**
-     * @param bool $forceOverwrite
-     */
-    public function setForceOverwrite($forceOverwrite)
-    {
-        $this->forceOverwrite = $forceOverwrite;
-    }
-
-    /**
      * @return string
      */
     public function getProtocol()
@@ -363,5 +341,5 @@ class ExportCsvReport
 
 
 
-$api = new ExportCsvReport();
+$api = new ExportPdfReport();
 echo $api->reportingApiCall();
