@@ -163,9 +163,6 @@ class ExportPdfReport
             echo "$user\n";
             echo "$password\n";
 
-            $info =  phpinfo();
-            // print_r($info);
-            // exit;
 
 
 
