@@ -337,7 +337,7 @@ class ExportPdfReport
         $semi_rand = md5(time()); 
         $mime_boundary = "==Multipart_Boundary_x{$semi_rand}x"; 
 
-        $htmlContent = '<h1>NeteEye Reporting Service Problem</h1>';
+        $htmlContent = '<h1>NetEye Reporting Service Problem</h1>';
 
         //headers for attachment 
         $headers .= "\nMIME-Version: 1.0\n" . "Content-Type: multipart/mixed;\n" . " boundary=\"{$mime_boundary}\""; 
