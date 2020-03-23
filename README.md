@@ -26,12 +26,18 @@ Directory for Script
       
 Move the NetEye Logo in direcotory /TCPDF/examples/images/
 
-### 4. Customize Variables
+### 4. Customize variables
 
-In this step is necessary to customize the following variables:
+In this step is necessary to customize the following variable:
 
-- $mailTo --> destination mail address
-      
+      $mailTo = 'mail@domain.com'  -->  destination mail address
+
+In order to customize also the received email you can customize also this optional variables:
+
+      $fromName = "Neteye4 Reporting",
+      $from = "pbzneteye4@wuerth-phoenix.com",
+      $message = "NetEye4 Monitoring Status Email",
+      $subject    = "NetEye4 Monitoring Status Email"
 
       
 
