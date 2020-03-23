@@ -19,7 +19,7 @@ Directory for Script
       mkdir /neteye/shared/icingaweb2/extras/reporting
       mkdir /neteye/shared/icingaweb2/extras/reporting/reporting_pdf_email
       
-### 3 Copy reporting_pdf_email.git content in /neteye/shared/icingaweb2/extras/reporting
+### 3 Copy reporting_pdf_email.git content in /neteye/shared/icingaweb2/extras/reporting/reporting_pdf_email
 
       cp /root/git-rep/report_pdf_email/* /neteye/shared/icingaweb2/extras/reporting/reporting_pdf_email
       cp /root/git-rep/TCPDF /neteye/shared/icingaweb2/extras/reporting/reporting_pdf_email
