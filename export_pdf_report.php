@@ -4,7 +4,7 @@ namespace Icinga\Module\Slm\scripts;
 
 
 
-require_once './TCPDF/tcpdf.php';
+require_once '/neteye/shared/icingaweb2/extras/reporting/reporting_pdf_email/TCPDF/tcpdf.php';
 use TCPDF;
 
 class ExportPdfReport 
@@ -137,7 +137,10 @@ class ExportPdfReport
     {
         $content = '';
         $httpCode = '400';
-        if (strlen($this->getUsername()) && strlen($this->getPassword())) {
+        $auth = 'root:flinlSOKGQbkqQiFGJRqcaK5Vj3hlucc';
+        //echo $auth;
+        //if (strlen($this->getUsername()) && strlen($this->getPassword())) {
+        if ($auth) {
             // Initiate curl
             $ch = curl_init();
             curl_setopt_array(
@@ -152,7 +155,7 @@ class ExportPdfReport
                         'Accept: application/json'
                     ],
                     CURLOPT_HTTPAUTH => CURLAUTH_ANY,
-                    CURLOPT_USERPWD => $this->getUsername() . ':' . $this->getPassword()
+                    CURLOPT_USERPWD => $auth
                 ]
             );
 
@@ -406,6 +409,7 @@ class ExportPdfReport
                             'Something went wrong!! Error (%s) %s' . chr(10),
                             $response['http_code'],
                             $errorMsg
+
                         );
                         $this->status = false;
                     }
