@@ -7,10 +7,10 @@ This script allows you to send a Email with the report of your Service Problem i
       git clone https://github.com/caragian/reporting_pdf_email.git
      
 ### 2 Create necessary directory for the script
-      //directory for pdf files
+      #directory for pdf files
       mkdir /tmp/reporting
       
-      //directory for script
+      #directory for script
       mkdir /neteye/shared/icingaweb2/extras/reporting
       
 ### 3 Copy reporting_pdf_email.git content in /neteye/shared/icingaweb2/extras/reporting
