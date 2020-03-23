@@ -7,6 +7,7 @@ This script allows you to send a Email with the report of your Service Problem i
       git clone https://github.com/caragian/reporting_pdf_email.git
      
 ### 2 Create necessary directory for the script
+[comment]: <> (This is a comment, it will not be included)
       #directory for pdf files
       mkdir /tmp/reporting
       
