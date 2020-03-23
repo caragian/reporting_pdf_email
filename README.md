@@ -48,6 +48,7 @@ Run Script with argument
 You can also run the script without arguments , but **warning**, you have to pay attention at the section of credentials valdiation in **protected function curlCall($requestUrl)**.
 
 
+## Optional
 In order to automate this script you can create a CronJob.
 
       crontab -e
