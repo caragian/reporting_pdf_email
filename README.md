@@ -47,6 +47,13 @@ Run Script with argument
       
 You can also run the script without arguments , but **warning**, you have to pay attention at the section of credentials valdiation in **protected function curlCall($requestUrl)**.
 
+
+In order to automate this script you can create a CronJob.
+
+      crontab -e
+      
+      * * * * *  /usr/bin/php /neteye/shared/icingaweb2/extras/reporting/reporting_pdf_email/export_pdf_report.php -u root -p $(cat .pwd_icingaweb2_root >/dev/null
+
       
 
       
