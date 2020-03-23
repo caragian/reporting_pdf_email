@@ -38,6 +38,14 @@ In order to customize also the received email you can customize also this option
       $from = "user@domain.com",
       $message = "NetEye4 Monitoring Status Email",
       $subject    = "NetEye4 Monitoring Status Email"
+      
+### 5. Run Script
+
+Run Script with argument
+
+      php export_pdf_report.php -root -p $(cat /root/.pwd_icingaweb2_root)
+      
+You can also run the script without arguments , but **warning**, you have to pay attention at the section of credentials valdiation in **protected function curlCall($requestUrl)**.
 
       
 
