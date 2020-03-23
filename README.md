@@ -11,7 +11,9 @@ This script allows you to send a Email with the report of your Service Problem i
 Directory for pdf files
       mkdir /tmp/reporting
 Directory for Script
+
       mkdir /neteye/shared/icingaweb2/extras/reporting
+      
       mkdir /neteye/shared/icingaweb2/extras/reporting/reporting_pdf_email
       
 ### 3 Copy reporting_pdf_email.git content in /neteye/shared/icingaweb2/extras/reporting
