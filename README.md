@@ -35,7 +35,7 @@ In this step is necessary to customize the following variable:
 In order to customize also the received email you can customize also this optional variables:
 
       $fromName = "Neteye4 Reporting",
-      $from = "pbzneteye4@wuerth-phoenix.com",
+      $from = "user@domain.com",
       $message = "NetEye4 Monitoring Status Email",
       $subject    = "NetEye4 Monitoring Status Email"
 
