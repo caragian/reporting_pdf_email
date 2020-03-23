@@ -162,7 +162,8 @@ class ExportPdfReport
                         'Accept: application/json'
                     ],
                     CURLOPT_HTTPAUTH => CURLAUTH_ANY,
-                    CURLOPT_USERPWD => $auth
+                    CURLOPT_USERPWD => $this->getUsername() . ':' . $this->getPassword()
+                    //CURLOPT_USERPWD => $auth
                 ]
             );
 
