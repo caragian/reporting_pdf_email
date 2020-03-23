@@ -16,8 +16,9 @@ class ExportPdfReport
     private $password;
 
     private $domain = 'localhost';
-
-    private $mailTo = 'Nicolae.Caragia@wuerth-phoenix.com';
+    
+    //Specify the destination
+    private $mailTo = 'mail@domain.com';
 
     private $reportId = 0;
 
@@ -137,10 +138,16 @@ class ExportPdfReport
     {
         $content = '';
         $httpCode = '400';
-        $auth = 'root:flinlSOKGQbkqQiFGJRqcaK5Vj3hlucc';
-        //echo $auth;
-        //if (strlen($this->getUsername()) && strlen($this->getPassword())) {
-        if ($auth) {
+        
+        //Use $auth to declare the credetials without arguments
+        //Comment $auth if you pass the credentials with arguments
+        //$auth = 'user:secret';
+        
+        //Use Line $auth if you declare the crentials without arguments
+        //if ($auth) {
+ 
+        //Use this function if you pass the credentials with arguments
+        if (strlen($this->getUsername()) && strlen($this->getPassword())) {
             // Initiate curl
             $ch = curl_init();
             curl_setopt_array(
@@ -323,7 +330,7 @@ class ExportPdfReport
         $mailTo,
         $file,
         $fromName = "Neteye4 Reporting",
-        $from = "pbzneteye4@wuerth-phoenix.com",
+        $from = "mail@domain.com",
         $message = "NetEye4 Monitoring Status Email",
         $subject    = "NetEye4 Monitoring Status Email"
         
