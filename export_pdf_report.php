@@ -24,6 +24,8 @@ class ExportPdfReport
 
     public $log = 0;
 
+    private $path = '/tmp/reporting';
+
     private $reportId = 0;
 
     private $message;
@@ -388,6 +390,9 @@ class ExportPdfReport
     //START//
     public function reportingApiCall()
     {
+        if (!file_exists($this->path)) {
+            mkdir($this->path, 0775, true);
+        };
         
         try {
             if (!$this->isHelpOption()) {
