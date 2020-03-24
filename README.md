@@ -24,13 +24,15 @@ Directory for Script
       cp /root/git-rep/report_pdf_email/* /neteye/shared/icingaweb2/extras/reporting/reporting_pdf_email
       cp /root/git-rep/TCPDF /neteye/shared/icingaweb2/extras/reporting/reporting_pdf_email
       
-Move the NetEye Logo in direcotory /TCPDF/examples/images/
+Move the NetEye Logo in directory /TCPDF/examples/images/
 
 ### 4. Customize variables
 
 In this step is necessary to customize the following variable:
 
       $mailTo = 'mail@domain.com'  -->  destination mail address
+      $limit = 300 --> max elements in report ( It's advisable leave it with this value )
+      $path = '/tmp/reporting' --> path which contains pdf reporting
 
 In order to customize also the received email you can customize also this optional variables:
 
@@ -43,7 +45,7 @@ In order to customize also the received email you can customize also this option
 
 Run Script with argument
 
-      php export_pdf_report.php -root -p $(cat /root/.pwd_icingaweb2_root)
+      php export_pdf_report.php -root -p secret
       
 You can also run the script without arguments , but **warning**, you have to pay attention at the section of credentials valdiation in **protected function curlCall($requestUrl)**.
 
@@ -53,7 +55,8 @@ In order to automate this script you can create a CronJob.
 
       crontab -e
       
-      * * * * *  /usr/bin/php /neteye/shared/icingaweb2/extras/reporting/reporting_pdf_email/export_pdf_report.php -u root -p $(cat .pwd_icingaweb2_root >/dev/null
+    * * * * *  systemctl status httpd.service > /dev/null 2>&1 &&  /usr/bin/php /neteye/shared/icingaweb2/extras/reporting/reporting_pdf_email/export_pdf_report.php -u root -p secret  >/dev/null
+
 
       
 
