@@ -20,6 +20,10 @@ class ExportPdfReport
     //Specify the email desination
     private $mailTo = 'nicolae.caragia@wuerth-phoenix.com';
 
+    public $limit = 300;
+
+    public $log = 0;
+
     private $reportId = 0;
 
     private $message;
@@ -262,8 +266,9 @@ class ExportPdfReport
         </thead>
         </table>';
 
+        $this->log = $i;
         return($temp);
-        exit();
+
     }
 
     //CREATION PDF HTML2PDF//
@@ -347,7 +352,7 @@ class ExportPdfReport
         $semi_rand = md5(time()); 
         $mime_boundary = "==Multipart_Boundary_x{$semi_rand}x"; 
 
-        $htmlContent = '<h1>NetEye Reporting Service Problem</h1>';
+        $htmlContent = '<h1>NetEye Reporting Service Problem</h1><p>In this Report are reported '.  $this->log .' elements.</p><p>Limit of elements in the query is '. $this->limit .'.';
 
         //headers for attachment 
         $headers .= "\nMIME-Version: 1.0\n" . "Content-Type: multipart/mixed;\n" . " boundary=\"{$mime_boundary}\""; 
@@ -387,7 +392,7 @@ class ExportPdfReport
         try {
             if (!$this->isHelpOption()) {
                     $baseUrl = sprintf(
-                        '%s://%s%s/neteye/monitoring/list/services?service_state=2',
+                        '%s://%s%s/neteye/monitoring/list/services?service_state=2&limit='.$this->limit,
                         $this->getProtocol(),
                         $this->getDomain(),
                         $this->getPort()
