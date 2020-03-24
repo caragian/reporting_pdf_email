@@ -17,8 +17,8 @@ class ExportPdfReport
 
     private $domain = 'localhost';
     
-    //Specify the destination
-    private $mailTo = 'mail@domain.com';
+    //Specify the email desination
+    private $mailTo = 'nicolae.caragia@wuerth-phoenix.com';
 
     private $reportId = 0;
 
@@ -162,7 +162,8 @@ class ExportPdfReport
                         'Accept: application/json'
                     ],
                     CURLOPT_HTTPAUTH => CURLAUTH_ANY,
-                    CURLOPT_USERPWD => $auth
+                    CURLOPT_USERPWD => $this->getUsername() . ':' . $this->getPassword()
+                    //CURLOPT_USERPWD => $auth
                 ]
             );
 
@@ -211,9 +212,8 @@ class ExportPdfReport
           <td width="63" align="center"><b>Is Acknowledged</b></td>
          </tr>';
 
-
         // /*Dynamically generating rows & columns*/
-        for($i = 0; $i < sizeof($data[0]); $i++)
+        for($i = 0; $i < sizeof($data); $i++)
         {
             //Service in Downtime
             if ($data[$i]['service_in_downtime'] == "0" ){
@@ -387,7 +387,7 @@ class ExportPdfReport
         try {
             if (!$this->isHelpOption()) {
                     $baseUrl = sprintf(
-                        '%s://%s%s/neteye/monitoring/list/services',
+                        '%s://%s%s/neteye/monitoring/list/services?service_state=2',
                         $this->getProtocol(),
                         $this->getDomain(),
                         $this->getPort()
@@ -395,6 +395,7 @@ class ExportPdfReport
                     $response = $this->curlCall($baseUrl);
 
                     echo "\nBase URL: $baseUrl";
+
 
 
                     if (!strlen($response['content']) || $response['http_code'] == 0) {
@@ -425,6 +426,10 @@ class ExportPdfReport
                         
                         //Decode the JSON and convert it into an associative array.
                         $jsonDecoded = json_decode($response['content'], true);
+
+                        $json_string = json_encode(json_decode($response['content']), JSON_PRETTY_PRINT);
+                        // echo $json_string;
+                        // exit();
 
                         //Run Json2Html and Html2Pdf
                         $this->htmlToPdf($this->jsonToHtml($jsonDecoded));
