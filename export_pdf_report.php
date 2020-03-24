@@ -17,7 +17,7 @@ class ExportPdfReport
 
     private $domain = 'localhost';
     
-    //Specify the destination
+    //Specify the email desination
     private $mailTo = 'mail@domain.com';
 
     private $reportId = 0;
