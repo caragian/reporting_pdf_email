@@ -9,10 +9,6 @@ This script allows you to send a Email with the report of your Service Problem i
       git clone https://github.com/tecnickcom/TCPDF.git
      
 ### 2. Create necessary directory for the script
-
-Directory for pdf files
-
-      mkdir /tmp/reporting
       
 Directory for Script
 
