@@ -40,7 +40,8 @@ In order to customize also the received email you can customize also this option
       $subject    = "NetEye4 Monitoring Status Email"
       
  **NOTE**
- I can also change the filter to custom your report:
+ 
+ You can also change the filter to custom your report:
  
         $baseUrl = sprintf(
                               '%s://%s%s/neteye/monitoring/list/services?service_state=2&limit='.$this->limit,
