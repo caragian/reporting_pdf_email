@@ -39,6 +39,20 @@ In order to customize also the received email you can customize also this option
       $message = "NetEye4 Monitoring Status Email",
       $subject    = "NetEye4 Monitoring Status Email"
       
+ **NOTE**
+ I can also change the filter to custom your report:
+ 
+        $baseUrl = sprintf(
+                              '%s://%s%s/neteye/monitoring/list/services?service_state=2&limit='.$this->limit,
+                              $this->getProtocol(),
+                              $this->getDomain(),
+                              $this->getPort()
+In this case we want to report the service problem which have service_state=2, but changing this line:
+
+       '%s://%s%s/neteye/monitoring/list/services?service_state=2&limit='.$this->limit,
+       
+you will be able to report different elements.
+
 ### 5. Run Script
 
 Run Script with argument
