@@ -1,5 +1,5 @@
 
-# NetEye 4 Reporting PDF via Email
+# NetEye 4 Reporting PDF by Email
 
 This script allows you to send a Email with the report of your Service Problem in NetEye4.
 
