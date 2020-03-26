@@ -21,6 +21,8 @@ Directory for Script
       cp /root/git-rep/TCPDF /neteye/shared/icingaweb2/extras/reporting/reporting_pdf_email
       
 Move the NetEye Logo in directory /TCPDF/examples/images/
+      
+      mv logo.png /TCPDF/examples/images/
 
 ### 4. Customize variables
 
