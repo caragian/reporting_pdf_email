@@ -2,8 +2,6 @@
 
 namespace Icinga\Module\Slm\scripts;
 
-
-
 require_once '/neteye/shared/icingaweb2/extras/reporting/reporting_pdf_email/TCPDF/tcpdf.php';
 use TCPDF;
 
@@ -20,13 +18,11 @@ class ExportPdfReport
     //Specify the email desination
     private $mailTo = 'nicolae.caragia@wuerth-phoenix.com';
 
-    public $limit = 300;
+    private $limit = 300;
 
-    public $log = 0;
+    private $log = 0;
 
     private $path = '/tmp/reporting';
-
-    private $reportId = 0;
 
     private $message;
 
@@ -34,13 +30,9 @@ class ExportPdfReport
 
     private $protocol = 'https';
 
-    private $filePath = '';
-
     private $status = true;
 
     private $helpOption = false;
-
-    private $forceOverwrite = false;
 
     public function __construct()
     {
@@ -50,7 +42,7 @@ class ExportPdfReport
             }
         }
 
-        $cliParams = getopt('u:p:d:i:f:P:H:');
+        $cliParams = getopt('u:p:d:P:H:');
 
         if (isset($cliParams['u'])) {
             $this->setUsername($cliParams['u']);
@@ -437,7 +429,7 @@ class ExportPdfReport
                         //Decode the JSON and convert it into an associative array.
                         $jsonDecoded = json_decode($response['content'], true);
 
-                        $json_string = json_encode(json_decode($response['content']), JSON_PRETTY_PRINT);
+                        //$json_string = json_encode(json_decode($response['content']), JSON_PRETTY_PRINT);
                         // echo $json_string;
                         // exit();
 
