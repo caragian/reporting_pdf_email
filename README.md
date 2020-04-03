@@ -58,7 +58,9 @@ you will be able to report different elements.
 
 Run Script with argument
 
-      php export_pdf_report.php -root -p secret
+      php export_pdf_report.php -root -p secret -c neteye/monitoring/list/services?service_problem=1
+      php export_pdf_report_host.php -root -p secret -c neteye/monitoring/list/hosts?host_state=1
+      
       
 You can also run the script without arguments , but **warning**, you have to pay attention at the section of credentials valdiation in **protected function curlCall($requestUrl)**.
 
