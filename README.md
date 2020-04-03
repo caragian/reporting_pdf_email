@@ -70,7 +70,7 @@ In order to automate this script you can create a CronJob.
 
       crontab -e
       
-    * * * * *  systemctl status httpd.service > /dev/null 2>&1 &&  /usr/bin/php /neteye/shared/icingaweb2/extras/reporting/reporting_pdf_email/export_pdf_report.php -u root -p secret  >/dev/null
+    * * * * *  systemctl status httpd.service > /dev/null 2>&1 &&  /usr/bin/php /neteye/shared/icingaweb2/extras/reporting/reporting_pdf_email/export_pdf_report.php -u root -p secret -c neteye/monitoring/list/services?service_problem=1 >/dev/null
 
 
       
