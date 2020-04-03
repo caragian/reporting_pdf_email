@@ -12,6 +12,8 @@ class ExportPdfReport
     private $username;
 
     private $password;
+    
+    private $costum;
 
     private $domain = 'localhost';
     
@@ -42,7 +44,7 @@ class ExportPdfReport
             }
         }
 
-        $cliParams = getopt('u:p:d:P:H:');
+        $cliParams = getopt('u:p:d:P:H:c:');
 
         if (isset($cliParams['u'])) {
             $this->setUsername($cliParams['u']);
@@ -63,6 +65,11 @@ class ExportPdfReport
         if (isset($cliParams['H'])) {
             $this->setProtocol($cliParams['H']);
         }
+
+        if (isset($cliParams['c'])) {
+            $this->setCustom($cliParams['c']);
+        }
+        
     }
 
     public function setUsername($username)
@@ -106,6 +113,11 @@ class ExportPdfReport
         $this->protocol = $protocol;
     }
 
+    public function setCustom($custom)
+    {
+        $this->custom = $custom;
+    }
+
     public function setDomain($domain)
     {
         $this->domain = $domain;
@@ -127,6 +139,7 @@ class ExportPdfReport
         -p                  Admin password of the Neteye application.
         -P                  Port.
         -H  <http|https>    Protocol.
+        -c                  URL to report. Pay to attention , the url start from the word "neteye". Example = neteye/monitoring/list/services?service_state=2.
         -h, --help          To display the help section.' . chr(10);
     }
 
@@ -385,11 +398,18 @@ class ExportPdfReport
         if (!file_exists($this->path)) {
             mkdir($this->path, 0775, true);
         };
+
+        
         
         try {
             if (!$this->isHelpOption()) {
+
+                if($this->custom==NULL){
+                    echo ("\n WARNING!!  DEFINE URL !!WARNING\n\n");
+                    exit();
+                }
                     $baseUrl = sprintf(
-                        '%s://%s%s/neteye/monitoring/list/services?service_state=2&limit='.$this->limit,
+                        '%s://%s%s/'. $this->custom  . '&limit='.$this->limit,
                         $this->getProtocol(),
                         $this->getDomain(),
                         $this->getPort()
@@ -397,6 +417,7 @@ class ExportPdfReport
                     $response = $this->curlCall($baseUrl);
 
                     echo "\nBase URL: $baseUrl";
+
 
 
 
