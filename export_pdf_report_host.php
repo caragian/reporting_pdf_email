@@ -213,13 +213,13 @@ class ExportPdfReport
           }
         </style>
         <table  cellpadding="1" >
-        <thead>
+        <thead>1
          <tr style="background-color:#524F4F;color:#ffffff;">
-          <td width="100" align="center"><b>Host Name</b></td>
-          <td width="200" align="center"><b>Host Output</b></td>
-          <td width="70" align="center"> <b>Host State</b></td>
-          <td width="75" align="center"><b>In Downtime</b></td>
-          <td width="63" align="center"><b>Is Acknowledged</b></td>
+          <td width="150" align="center"><b>Host Name</b></td>
+          <td width="250" align="center"><b>Host Output</b></td>
+          <td width="80" align="center"> <b>Host State</b></td>
+          <td width="85" align="center"><b>In Downtime</b></td>
+          <td width="73" align="center"><b>Is Acknowledged</b></td>
          </tr>';
 
         // /*Dynamically generating rows & columns*/
@@ -242,21 +242,21 @@ class ExportPdfReport
             //Service State
             if ($data[$i]['host_state'] == "0"){
                 $host_state = "UP";
-                $style = '<td width="70" style="background-color:#5db25d;color:#ffffff;">';
+                $style = '<td width="80" style="background-color:#5db25d;color:#ffffff;">';
             } elseif ($data[$i]['host_state'] == "1") {
                 $host_state = "DOWN";
-                $style = '<td width="70" style="background-color:#ff3300;color:#ffffff;">';
+                $style = '<td width="80" style="background-color:#ff3300;color:#ffffff;">';
             };
 
             //Service Output
             $host_output = substr($data[$i]['host_output'],0,50).'....';
 
             $temp .= '<tr>';
-            $temp .= '<td width="100">' . $data[$i]['host_name'] . '</td>';
-            $temp .= '<td width="200">' . $host_output . '</td>';
+            $temp .= '<td width="150">' . $data[$i]['host_name'] . '</td>';
+            $temp .= '<td width="250">' . $host_output . '</td>';
             $temp .= $style . $host_state . '</td>';
-            $temp .= '<td width="75">' . $host_downtime . '</td>';
-            $temp .= '<td width="63">' . $host_ack . '</td>';
+            $temp .= '<td width="85">' . $host_downtime . '</td>';
+            $temp .= '<td width="73">' . $host_ack . '</td>';
             $temp .= '</tr>';
         }
 
@@ -290,10 +290,10 @@ class ExportPdfReport
         // set document information
         $pdf->SetCreator("NetEye");
         $pdf->SetAuthor('NetEye4');
-        $pdf->SetTitle('NeteEye4 Reporting Service Problem');
+        $pdf->SetTitle('NeteEye4 Reporting Host Problem');
 
         // set default header data
-        $pdf->SetHeaderData("logo.png", PDF_HEADER_LOGO_WIDTH, "NetEye", "Reporting Service Problem");
+        $pdf->SetHeaderData("logo.png", PDF_HEADER_LOGO_WIDTH, "NetEye", "Reporting Host Problem");
 
         // set header and footer fonts
         $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
