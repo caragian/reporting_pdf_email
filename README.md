@@ -17,12 +17,12 @@ Directory for Script
       
 ### 3. Copy reporting_pdf_email.git content in /neteye/shared/icingaweb2/extras/reporting/reporting_pdf_email
 
-      cp /root/git-rep/report_pdf_email/* /neteye/shared/icingaweb2/extras/reporting/reporting_pdf_email
+      cp /root/git-rep/reporting_pdf_email/* /neteye/shared/icingaweb2/extras/reporting/reporting_pdf_email
       cp /root/git-rep/TCPDF /neteye/shared/icingaweb2/extras/reporting/reporting_pdf_email
       
-Move the NetEye Logo in directory /TCPDF/examples/images/
+Move the NetEye Logo in directory TCPDF/examples/images/
       
-      mv logo.png /TCPDF/examples/images/
+      mv logo.png TCPDF/examples/images/
 
 ### 4. Customize variables
 
