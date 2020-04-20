@@ -202,25 +202,29 @@ class ExportPdfReport
     {
         echo "\n\nConverting Json result from Html";
         /*Initializing temp variable to design table dynamically*/
-        $temp = '
-        <style>
-        table {
-            border-collapse: collapse;
-          }
+        $temp = '<!DOCTYPE html>
+		<head>
+			<meta charset="UTF-8">
+			<style>
+				table {
+					border-collapse: collapse;
+				}
           
-        table, td, th {
-            border: 0.6px solid black;
-          }
-        </style>
-        <table  cellpadding="1" >
-        <thead>1
-         <tr style="background-color:#524F4F;color:#ffffff;">
-          <td width="150" align="center"><b>Host Name</b></td>
-          <td width="250" align="center"><b>Host Output</b></td>
-          <td width="80" align="center"> <b>Host State</b></td>
-          <td width="85" align="center"><b>In Downtime</b></td>
-          <td width="73" align="center"><b>Is Acknowledged</b></td>
-         </tr>';
+				table, td, th {
+					border: 0.6px solid black;
+				}
+			</style>
+		</head>
+	<table  cellpadding="1" >
+       
+	 <thead>
+		 <tr style="background-color:#524F4F;color:#ffffff;">
+         		<td width="150"><b>Host Name</b></td>
+          		<td width="250"><b>Host Output</b></td>
+          		<td width="80"><b>Host State</b></td>
+          		<td width="85"><b>In Downtime</b></td>
+          		<td width="73"><b>Is Acknowledged</b></td>
+         	</tr>';
 
         // /*Dynamically generating rows & columns*/
         for($i = 0; $i < sizeof($data); $i++)
@@ -239,6 +243,7 @@ class ExportPdfReport
                 $host_ack = "Yes";
             };
 
+
             //Service State
             if ($data[$i]['host_state'] == "0"){
                 $host_state = "UP";
@@ -248,8 +253,19 @@ class ExportPdfReport
                 $style = '<td width="80" style="background-color:#ff3300;color:#ffffff;">';
             };
 
+            $host_output = $data[$i]['host_output'];
+
+            if (strpos($data[$i]['host_output'], 'Timeout exceeded') !== false) {
+                $host_output = 'Timeout exceeded.Terminated by signal 9 (Killed)';
+            }
+
+
+
+
             //Service Output
-            $host_output = substr($data[$i]['host_output'],0,50).'....';
+            //$host_output = substr($data[$i]['host_output'],0,50).'....';
+            //
+        
 
             $temp .= '<tr>';
             $temp .= '<td width="150">' . $data[$i]['host_name'] . '</td>';
@@ -264,6 +280,7 @@ class ExportPdfReport
         $temp .= '
         </thead>
         </table>';
+
 
         $myfile = fopen("newfile.html", "w") or die("Unable to open file!");
         fwrite($myfile, $temp);
@@ -280,7 +297,7 @@ class ExportPdfReport
         $date = getdate();
 
         $today = $date['year'].$date['mon'].$date['mday'];
-        $pdfName = "service_problem_$today.pdf";
+        $pdfName = "host_problem_$today.pdf";
 
         echo "\n\nConverting Html to PDF";
  
@@ -321,7 +338,6 @@ class ExportPdfReport
         // add a page
         $pdf->AddPage();
 
-
         $pdf->writeHTML($html, true, false, false, false, '');
 
      
@@ -355,7 +371,7 @@ class ExportPdfReport
         $semi_rand = md5(time()); 
         $mime_boundary = "==Multipart_Boundary_x{$semi_rand}x"; 
 
-        $htmlContent = '<h1>NetEye Reporting Service Problem</h1><p>In this Report are reported '.  $this->log .' elements.</p><p>Limit of elements in the query is '. $this->limit .'.';
+        $htmlContent = '<h1>NetEye Reporting Host Problem</h1><p>In this Report are reported '.  $this->log .' elements.</p><p>Limit of elements in the query is '. $this->limit .'.';
 
         //headers for attachment 
         $headers .= "\nMIME-Version: 1.0\n" . "Content-Type: multipart/mixed;\n" . " boundary=\"{$mime_boundary}\""; 
@@ -415,8 +431,6 @@ class ExportPdfReport
                     echo "\nBase URL: $baseUrl";
 
 
-
-
                     if (!strlen($response['content']) || $response['http_code'] == 0) {
                         $this->message = 'Got error response (Code: ' . $response['http_code'] . ')' . chr(10);
                         $this->status = false;
@@ -446,9 +460,9 @@ class ExportPdfReport
                         //Decode the JSON and convert it into an associative array.
                         $jsonDecoded = json_decode($response['content'], true);
 
-                        //$json_string = json_encode(json_decode($response['content']), JSON_PRETTY_PRINT);
-                        // echo $json_string;
-                        // exit();
+                        $json_string = json_encode(json_decode($response['content']), JSON_PRETTY_PRINT);
+                        //echo $json_string;
+                        //exit();
 
                         //Run Json2Html and Html2Pdf
                         $this->htmlToPdf($this->jsonToHtml($jsonDecoded));
@@ -456,7 +470,7 @@ class ExportPdfReport
                         //Get File Name
                         $date = getdate();
                         $today = $date['year'].$date['mon'].$date['mday'];
-                        $file = "/tmp/reporting/service_problem_$today.pdf";
+                        $file = "/tmp/reporting/host_problem_$today.pdf";
 
                         //Send Email
                         $email = $this->sendMail($this->mailTo, $file);
