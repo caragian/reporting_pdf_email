@@ -256,9 +256,19 @@ class ExportPdfReport
             };
 
             //Service Output
-            $service_output = substr($data[$i]['service_output'],0,50).'....';
+            #$service_output = substr($data[$i]['service_output'],0,50).'....';
 
-            $temp .= '<tr>';
+            $service_output = $data[$i]['service_output'];
+
+            //Remove '< & >' to avoid problems with HTML code
+            if (strpos($data[$i]['service_output'], '<') !== false) {
+                $service_output = str_replace('<','',$service_output);
+            }
+            if (strpos($data[$i]['service_output'], '>') !== false){
+                $service_output = str_replace('>','',$service_output);
+            }
+            
+	        $temp .= '<tr>';
             $temp .= '<td width="100">' . $data[$i]['host_name'] . '</td>';
             $temp .= '<td width="130">' . $data[$i]['service_description'] . '</td>';
             $temp .= '<td width="200">' . $service_output . '</td>';

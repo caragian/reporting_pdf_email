@@ -255,16 +255,20 @@ class ExportPdfReport
 
             $host_output = $data[$i]['host_output'];
 
-            if (strpos($data[$i]['host_output'], 'Timeout exceeded') !== false) {
-                $host_output = 'Timeout exceeded.Terminated by signal 9 (Killed)';
+            //Remove '< & >' to avoid problems with HTML code
+            if (strpos($data[$i]['host_output'], '<') !== false) {
+                $host_output = str_replace('<','',$host_output);
             }
+            if (strpos($data[$i]['host_output'], '>') !== false){
+                $host_output = str_replace('>','',$host_output);
+            }
+
 
 
 
 
             //Service Output
             //$host_output = substr($data[$i]['host_output'],0,50).'....';
-            //
         
 
             $temp .= '<tr>';
