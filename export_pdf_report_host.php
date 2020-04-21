@@ -254,22 +254,10 @@ class ExportPdfReport
             };
 
             $host_output = $data[$i]['host_output'];
+            // $host_output = substr($data[$i]['host_output'],0,50).'....';
 
-            //Remove '< & >' to avoid problems with HTML code
-            if (strpos($data[$i]['host_output'], '<') !== false) {
-                $host_output = str_replace('<','',$host_output);
-            }
-            if (strpos($data[$i]['host_output'], '>') !== false){
-                $host_output = str_replace('>','',$host_output);
-            }
-
-
-
-
-
-            //Service Output
-            //$host_output = substr($data[$i]['host_output'],0,50).'....';
-        
+            // Encode HTML (Output Field)
+            $host_output = htmlentities($host_output, ENT_QUOTES);   
 
             $temp .= '<tr>';
             $temp .= '<td width="150">' . $data[$i]['host_name'] . '</td>';
