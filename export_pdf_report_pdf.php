@@ -233,11 +233,12 @@ class ExportPdfReport
         /*Initializing temp variable to design table dynamically*/
         $temp .= '<h1>Service Problem</h1>';
         
-        $temp .= 'Filter = '.$filter.'<br>';
-        
         $temp .= '<table  cellpadding="1" >
         <thead>
          <tr style="background-color:#524F4F;color:#ffffff;">
+          <td width="946" align="center"><b>Service Report Filter = '. $filter;
+        $temp .= '</b></td></tr>
+        <tr style="background-color:#524F4F;color:#ffffff;">
           <td width="150" align="center"><b>Host Name</b></td>
           <td width="130" align="center"><b>Service Description</b></td>
           <td width="490" align="center"><b>Service Output</b></td>
@@ -314,13 +315,15 @@ class ExportPdfReport
 
         $temp .= '<h1>Host Problem</h1>';
         
-        $temp .= 'Filter = '.$filter.'<br>';
         
         $temp .= '
 	<table  cellpadding="1" >
        
 	 <thead>
-		 <tr style="background-color:#524F4F;color:#ffffff;">
+         <tr style="background-color:#524F4F;color:#ffffff;">
+                <td width="946" align="center"><b>Host Report Filter = '.$filter;
+        $temp .= '</b></td></tr>
+        <tr style="background-color:#524F4F;color:#ffffff;">
          		<td width="216"><b>Host Name</b></td>
           		<td width="480"><b>Host Output</b></td>
           		<td width="80"><b>Host State</b></td>
@@ -596,7 +599,7 @@ class ExportPdfReport
                 };
                 //Send Email
                 $email = $this->sendMail($this->mailTo, $file);
-                
+
             } else {
                 $this->helpSection();
             }
