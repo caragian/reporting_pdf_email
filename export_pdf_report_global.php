@@ -10,6 +10,8 @@ class ExportPdfReport
 
     private $global_html;
 
+    private $name;
+
     private $prefix_url = 'neteye/monitoring/list/';
 
     //Elements to Report
@@ -67,7 +69,7 @@ class ExportPdfReport
             }
         }
 
-        $cliParams = getopt('u:p:d:P:H:c:');
+        $cliParams = getopt('u:p:d:P:H:n:');
 
         if (isset($cliParams['u'])) {
             $this->setUsername($cliParams['u']);
@@ -89,6 +91,10 @@ class ExportPdfReport
             $this->setProtocol($cliParams['H']);
         }
         
+        if (isset($cliParams['n'])) {
+            $this->setName($cliParams['n']);
+        }
+        
     }
 
     public function setUsername($username)
@@ -100,6 +106,18 @@ class ExportPdfReport
     {
         return $this->username;
     }
+
+    //
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
 
     public function setPort($port)
     {
@@ -143,6 +161,8 @@ class ExportPdfReport
         $this->password = $password;
     }
 
+    $name = $this->getName();
+
     protected function helpSection()
     {
         // This function will print the help section
@@ -154,6 +174,7 @@ class ExportPdfReport
         -p                  Admin password of the Neteye application.
         -P                  Port.
         -H  <http|https>    Protocol.
+        -n                  Name Report
         -h, --help          To display the help section.' . chr(10);
     }
 
@@ -402,7 +423,7 @@ class ExportPdfReport
         $date = getdate();
 
         $today = $date['year'].$date['mon'].$date['mday'];
-        $pdfName = "global_problem_$today.pdf";
+        $pdfName = $name."_$today.pdf";
 
         $myfile = fopen("global.html", "w") or die("Unable to open file!");
         fwrite($myfile, $html);
@@ -470,6 +491,7 @@ class ExportPdfReport
         
     )
     {
+        $name = $this->getName();
         echo("\n\nSending Email to $mailTo");
         
 
@@ -481,7 +503,7 @@ class ExportPdfReport
         $semi_rand = md5(time()); 
         $mime_boundary = "==Multipart_Boundary_x{$semi_rand}x"; 
 
-        $htmlContent = '<h1>NetEye Reporting Global Problem</h1><p>In this Report are reported '.  $this->log .' elements.</p><p>Limit of elements in the query is '. $this->limit .'.';
+        $htmlContent = '<h1>NetEye Reporting Global '.$name.'</h1><p>In this Report are reported '.  $this->log .' elements.</p><p>Limit of elements in the query is '. $this->limit .'.';
 
         //headers for attachment 
         $headers .= "\nMIME-Version: 1.0\n" . "Content-Type: multipart/mixed;\n" . " boundary=\"{$mime_boundary}\""; 
@@ -598,12 +620,12 @@ class ExportPdfReport
                                 $this->jsonToHtml_Host($jsonDecoded_Host, $filter);
                             };
     
+                            $name = $this->getName();
                             $this->htmlToPdf($this->global_html);
                             //Get File Name
                             $date = getdate();
                             $today = $date['year'].$date['mon'].$date['mday'];
-                            $file = "/tmp/reporting/global_problem_$today.pdf";
-    
+                            $file = "/tmp/reporting/$name" . "_". "$today.pdf";
                            
                         
                         }
@@ -611,7 +633,7 @@ class ExportPdfReport
                          
                 };
                 //Send Email
-                $email = $this->sendMail($this->mailTo, $file);
+                $email = $this->sendMail($this->mailTo, $file, $name);
 
             } else {
                 $this->helpSection();
