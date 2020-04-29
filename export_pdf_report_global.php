@@ -161,7 +161,6 @@ class ExportPdfReport
         $this->password = $password;
     }
 
-    $name = $this->getName();
 
     protected function helpSection()
     {
@@ -418,7 +417,7 @@ class ExportPdfReport
     }
 
     //CREATION PDF HTML2PDF//
-    public function htmlToPdf($html)
+    public function htmlToPdf($html, $name)
     {
         $date = getdate();
 
@@ -437,10 +436,10 @@ class ExportPdfReport
         // set document information
         $pdf->SetCreator("NetEye");
         $pdf->SetAuthor('NetEye4');
-        $pdf->SetTitle('NeteEye4 Reporting Global Problem');
+        $pdf->SetTitle('NeteEye4 Reporting Global Problem - '.$name);
 
         // set default header data
-        $pdf->SetHeaderData("logo.png", PDF_HEADER_LOGO_WIDTH, "NetEye", "Reporting Global Problem");
+        $pdf->SetHeaderData("logo.png", PDF_HEADER_LOGO_WIDTH, "NetEye", "Reporting Global Problem - ".$name);
 
         // set header and footer fonts
         $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
@@ -484,6 +483,7 @@ class ExportPdfReport
     protected function sendMail(
         $mailTo,
         $file,
+        $name,
         $fromName = "Neteye4 Reporting",
         $from = "mail@domain.com",
         $message = "NetEye4 Monitoring Status Email",
@@ -491,7 +491,6 @@ class ExportPdfReport
         
     )
     {
-        $name = $this->getName();
         echo("\n\nSending Email to $mailTo");
         
 
@@ -621,7 +620,7 @@ class ExportPdfReport
                             };
     
                             $name = $this->getName();
-                            $this->htmlToPdf($this->global_html);
+                            $this->htmlToPdf($this->global_html, $name);
                             //Get File Name
                             $date = getdate();
                             $today = $date['year'].$date['mon'].$date['mday'];
